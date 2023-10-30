@@ -20,5 +20,5 @@ jobs:
           distribution: 'adopt'
 
       - name: Build and test with Maven
-        working-directory: simple-api
+        working-directory: simpleapi
         run: mvn clean verify
