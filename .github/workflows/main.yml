@@ -21,3 +21,44 @@ jobs:
 
       - name: Build and test with Maven
         run: mvn clean verify
+
+  # define job to build and publish docker image
+  build-and-push-docker-image:
+    needs: test-backend
+    # run only when code is compiling and tests are passing
+    runs-on: ubuntu-22.04
+
+    # steps to perform in job
+    steps:
+      - name: Login to DockerHub
+        uses: docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_TOKEN}}
+
+      - name: Checkout code
+        uses: actions/checkout@v2.5.0
+
+      - name: Build image and push backend
+        uses: docker/build-push-action@v3
+        with:
+          # relative path to the place where source code with Dockerfile is located
+          context: ./
+          # Note: tags has to be all lower-case
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops:simpleapi
+          push: ${{ github.ref == 'refs/heads/master' }}
+
+      - name: Build image and push database
+        uses: docker/build-push-action@v3
+        with:
+          # relative path to the place where source code with Dockerfile is located
+          context: ./Database
+          # Note: tags has to be all lower-case
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops:bdd
+          push: ${{ github.ref == 'refs/heads/master' }}
+
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v3
+        with:
+          # relative path to the place where source code with Dockerfile is located
+          context: ./html
+          # Note: tags has to be all lower-case
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops:httpd
+          push: ${{ github.ref == 'refs/heads/master' }}
