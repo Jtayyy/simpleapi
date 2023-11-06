@@ -1,0 +1,10 @@
+- name: Run HTTPD
+  docker_container:
+    name: httpd
+    image: pbonnefoy/simpleapi-httpd:latest
+    pull: true
+    recreate: true
+    ports:
+      - "80:80"
+    networks:
+      - name: app-network
