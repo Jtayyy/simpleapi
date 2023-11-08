@@ -1,10 +1,10 @@
 - name: Run HTTPD
-  docker_container:
+  docker_container: # Enfin, on crée de docker du proxy
     name: httpd
     image: pbonnefoy/simpleapi-httpd:latest
     pull: true
     recreate: true
-    ports:
+    ports: # Que l'on expose sur le port 80, afin de pouvoir récupérer mon application.
       - "80:80"
     networks:
       - name: app-network

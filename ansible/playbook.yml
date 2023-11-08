@@ -2,7 +2,7 @@
   gather_facts: false
   become: true
 
-  roles:
+  roles: # Les 5 étapes à effectuer, dans l'ordre :
     - install-docker
     - create-network
     - launch-database

@@ -1,34 +1,37 @@
-name: CI devops 2023
+name: CI devops 2023 # Nom du fichier
 on:
-  #to begin you want to launch this job in main and develop
+  # On lance le job pour les branches main et develop
   push:
     branches: [master, develop]
   pull_request:
 
 
 jobs:
-  test-backend:
+  test-backend: # Job backend
     runs-on: ubuntu-22.04
     steps:
+      # vérification du code github en utilisant actions/checkout@v2.5.0
       - name: Checkout code
         uses: actions/checkout@v2.5.0
 
+      # Utilisation d'un JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'adopt'
 
+      # On build l'image, et on la teste avec SonarCloud, pour être sûr d'avoir un code propre et sécurisé.
       - name: Build and test with Maven
         run: mvn -B verify sonar:sonar -Dsonar.projectKey=simpleapi-tpdevops_simpleapi -Dsonar.organization=simpleapi-tpdevops -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./pom.xml
 
-  # define job to build and publish docker image
+  # Job pour build et push l'image docker
   build-and-push-docker-image:
     needs: test-backend
-    # run only when code is compiling and tests are passing
+    # On effectue les actions suivantes seulement si le backend fonctionne
     runs-on: ubuntu-22.04
 
-    # steps to perform i
+    # Et on sépare en étapes notre processus de connection, puis de push.
     steps:
       - name: Login to DockerHub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}

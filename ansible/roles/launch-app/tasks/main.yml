@@ -1,8 +1,8 @@
 - name: Run Backend
-  docker_container:
-    name: backend
-    image: pbonnefoy/simpleapi-backend:latest
+  docker_container: # On lance notre conteneur du backend
+    name: backend # En gardant le même nom
+    image: pbonnefoy/simpleapi-backend:latest # En prenant mon image, avec sa dernière mise à jour (dans le sens ou c'est moi qui fais les maj, ça n'est pas un soucis de prendre la latest)
     pull: true
-    recreate: true
+    recreate: true # Pour éviter tout problème, on re pull et recrée le conteneur à chaque execution
     networks:
-      - name: app-network
+      - name: app-network # Et on se greffe sur le network de l'application

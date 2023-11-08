@@ -1,12 +1,12 @@
 - name: Launch Database Container
-  docker_container:
+  docker_container: # On lance le conteneur de la base de données
     name: db
     image: pbonnefoy/simpleapi-db:latest
     pull: true
     recreate: true
     networks:
       - name: app-network
-    env:
+    env: # En donnant mes variables de connexion. Une amélioration à faire serait de mieux les protéger, car ici, elles sont poussées sur mon dépôt Github.
       POSTGRES_DB: db
       POSTGRES_USER: usr
       POSTGRES_PASSWORD: pwd

@@ -1,22 +1,22 @@
-version: '3.7'
+version: '3.7' # On donne la version de notre compose
 
 services:
-  db:
-    build:
+  db: # Partie base de données
+    build: # On indique quel fichier utiliser pour build l'image
       context: ./Database
       dockerfile: Dockerfile
-    container_name: db
-    volumes:
+    container_name: db # On nomme notre conteneur
+    volumes: # Et on lui donne un emplacement pour stoquer des volumes, qui permettent d'avoir une persistance des données si l'on redémarre notre conteneur.
       - db-data:/var/lib/postgresql/data
 #    ports:
 #      - 5432:5432
-    networks:
+    networks: # On lui indique le network sur lequel se greffer
       - app-network
 
   adminer:
-    image: adminer:latest
+    image: adminer:latest # Ici, on ne rebuild pas une image avec un Dockerfile, mais on utilise une image existante
     container_name: adminer
-    ports:
+    ports: # On lui donne le port sur lequel exposer l'adminer, afin de pouvoir l'utiliser par la suite
       - 8090:8080
     networks:
       - app-network
@@ -28,7 +28,7 @@ services:
       dockerfile: Dockerfile
     networks:
       - app-network
-    depends_on:
+    depends_on: # On indique à notre backend qu'il doit attendre la fin du démarrage de la base de données avant de démarrer lui-même
       - db
 
   httpd:
@@ -43,8 +43,8 @@ services:
     depends_on:
       - backend
 
-networks:
+networks: # Création du network
   app-network:
 
-volumes:
+volumes: # Création des volumes
   db-data:

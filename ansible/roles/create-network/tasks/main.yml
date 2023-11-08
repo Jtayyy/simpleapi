@@ -1,3 +1,3 @@
 - name: Create a network
-  community.docker.docker_network:
-    name: app-network
+  community.docker.docker_network: # On créé un network docker
+    name: app-network # Que l'on appelle app-network, comme dans les parties précédentes.
